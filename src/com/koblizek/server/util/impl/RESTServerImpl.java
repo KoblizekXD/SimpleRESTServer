@@ -12,6 +12,7 @@ import com.koblizek.server.util.annotations.Put;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -59,6 +60,16 @@ public class RESTServerImpl extends RESTServer {
 
     @Override
     public void publish(int port) throws IOException {
+        for (FunctionalComponent component : components) {
+            server.createContext(component.getPath(),
+                exchange -> {
+                    try {
+                        component.getMethod().invoke(null, new Request(exchange));
+                    } catch (Exception e) {
+                        throw new RESTServerException("Unknown error has occurred");
+                    }
+                });
+        }
         server.bind(new InetSocketAddress(port), 0);
         server.start();
     }
