@@ -17,7 +17,7 @@ public class Main implements Component {
         server.publish(8080);
     }
     @Get("/hw")
-    public void getHelloWorld(Request request) throws IOException {
-        request.send("abc");
+    public void getHelloWorld(Request request) throws IOException, IllegalAccessException {
+        request.sendTable(new UserComponent());
     }
 }
