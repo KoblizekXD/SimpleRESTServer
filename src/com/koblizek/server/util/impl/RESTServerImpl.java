@@ -9,6 +9,7 @@ import com.koblizek.server.util.annotations.Delete;
 import com.koblizek.server.util.annotations.Get;
 import com.koblizek.server.util.annotations.Post;
 import com.koblizek.server.util.annotations.Put;
+import com.koblizek.test.Main;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -60,7 +61,8 @@ public class RESTServerImpl extends RESTServer {
                 exchange -> {
                     try {
                         if (exchange.getRequestMethod().equals(component.getType().toString())) {
-                            component.getMethod().invoke(null, new Request(exchange));
+                            // newInstance deprecated - needs to be replaced
+                            component.getMethod().invoke(component.getMethod().getDeclaringClass().newInstance(), new Request(exchange));
                         }
                     } catch (Exception e) {
                         throw new RESTServerException("Unknown error has occurred");
