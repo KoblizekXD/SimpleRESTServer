@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UserComponent implements Component, Table {
     @TableComponent
-    public String id = "Hello";
+    public int id = 1;
     @Get("/users")
     public void getUsers(Request request) throws IOException {
         request.send(List.of(

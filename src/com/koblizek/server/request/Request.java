@@ -30,10 +30,18 @@ public final class Request {
         for (int i = 0; i < tableClass.getClass().getFields().length; i++) {
             Field field = tableClass.getClass().getFields()[i];
             if (field.isAnnotationPresent(TableComponent.class)) {
-                if (i+1 == tableClass.getClass().getFields().length) {
-                    builder.append("\""+field.getName()+"\":\""+field.get(tableClass)+"\"");
+                if (field.getType() == String.class) {
+                    if (i+1 == tableClass.getClass().getFields().length) {
+                        builder.append("\""+field.getName()+"\":\""+field.get(tableClass)+"\"");
+                    } else {
+                        builder.append("\""+field.getName()+"\":\""+field.get(tableClass)+"\",");
+                    }
                 } else {
-                    builder.append("\""+field.getName()+"\":\""+field.get(tableClass)+"\",");
+                    if (i+1 == tableClass.getClass().getFields().length) {
+                        builder.append("\""+field.getName()+"\":"+field.get(tableClass)+"");
+                    } else {
+                        builder.append("\""+field.getName()+"\":"+field.get(tableClass)+",");
+                    }
                 }
             }
         }
