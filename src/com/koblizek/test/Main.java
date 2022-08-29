@@ -5,9 +5,9 @@ import com.koblizek.server.RESTServer;
 import com.koblizek.server.request.Request;
 import com.koblizek.server.util.Component;
 import com.koblizek.server.util.annotations.Get;
+import com.koblizek.server.util.json.JSON;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class Main implements Component {
     public static void main(String[] args) throws IOException {
@@ -17,7 +17,10 @@ public class Main implements Component {
         server.publish(8080);
     }
     @Get("/hw")
-    public void getHelloWorld(Request request) throws IOException {
-        request.send("abc");
+    public void getTest(Request request) throws IOException, IllegalAccessException {
+        request.sendJSON(
+                new JSON<String>()
+                        .put("h", "a")
+        );
     }
 }
