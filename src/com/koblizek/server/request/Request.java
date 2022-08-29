@@ -34,15 +34,27 @@ public final class Request {
             if (field.isAnnotationPresent(TableComponent.class)) {
                 if (field.getType() == String.class) {
                     if (i+1 == tableClass.getClass().getFields().length) {
-                        builder.append("\""+field.getName()+"\":\""+field.get(tableClass)+"\"");
+                        builder.append("\"")
+                                .append(field.getName())
+                                .append("\":\"")
+                                .append(field.get(tableClass)).append("\"");
                     } else {
-                        builder.append("\""+field.getName()+"\":\""+field.get(tableClass)+"\",");
+                        builder.append("\"")
+                                .append(field.getName())
+                                .append("\":\"")
+                                .append(field.get(tableClass)).append("\",");
                     }
                 } else {
                     if (i+1 == tableClass.getClass().getFields().length) {
-                        builder.append("\""+field.getName()+"\":"+field.get(tableClass)+"");
+                        builder.append("\"")
+                                .append(field.getName())
+                                .append("\":")
+                                .append(field.get(tableClass));
                     } else {
-                        builder.append("\""+field.getName()+"\":"+field.get(tableClass)+",");
+                        builder.append("\"")
+                                .append(field.getName())
+                                .append("\":")
+                                .append(field.get(tableClass)).append(",");
                     }
                 }
             }
@@ -59,9 +71,17 @@ public final class Request {
         StringBuilder builder = new StringBuilder("{");
         map.forEach((k, v) -> {
             if (v.getClass() == String.class) {
-                builder.append("\""+k+"\":\""+v+"\",");
+                builder.append("\"")
+                        .append(k)
+                        .append("\":\"")
+                        .append(v)
+                        .append("\",");
             } else {
-                builder.append("\""+k+"\":"+v+",");
+                builder.append("\"")
+                        .append(k)
+                        .append("\":")
+                        .append(v)
+                        .append(",");
             }
         });
         builder.deleteCharAt(builder.toString().length()-1);

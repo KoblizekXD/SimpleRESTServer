@@ -10,10 +10,12 @@ public class JSON<T> {
     }
     public JSON<T> put(String name, T value) {
         if (value.getClass() == String.class) {
-            stringBuilder.append(
-                    "\""+name+"\":"
-                    +"\""+value.toString()+"\","
-                    );
+            stringBuilder.append("\"")
+                    .append(name)
+                    .append("\":")
+                    .append("\"")
+                    .append(value)
+                    .append("\",");
         }
         return this;
     }

@@ -9,11 +9,9 @@ import com.koblizek.server.util.annotations.Delete;
 import com.koblizek.server.util.annotations.Get;
 import com.koblizek.server.util.annotations.Post;
 import com.koblizek.server.util.annotations.Put;
-import com.koblizek.test.Main;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
