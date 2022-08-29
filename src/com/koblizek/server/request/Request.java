@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.Map;
 
 public final class Request {
     private final HttpExchange exchange;
@@ -45,6 +46,24 @@ public final class Request {
                 }
             }
         }
+        builder.append("}");
+        exchange.sendResponseHeaders(200, builder.length());
+        OutputStream stream = exchange.getResponseBody();
+        stream.write(builder.toString().getBytes());
+        stream.close();
+    }
+    public <K, V> void sendTable(Map<K, V> map) throws IOException {
+        if (map.isEmpty()) return;
+        exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json"));
+        StringBuilder builder = new StringBuilder("{");
+        map.forEach((k, v) -> {
+            if (v.getClass() == String.class) {
+                builder.append("\""+k+"\":\""+v+"\",");
+            } else {
+                builder.append("\""+k+"\":"+v+",");
+            }
+        });
+        builder.deleteCharAt(builder.toString().length()-1);
         builder.append("}");
         exchange.sendResponseHeaders(200, builder.length());
         OutputStream stream = exchange.getResponseBody();

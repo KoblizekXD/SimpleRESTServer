@@ -7,7 +7,7 @@ import com.koblizek.server.util.Component;
 import com.koblizek.server.util.annotations.Get;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.HashMap;
 
 public class Main implements Component {
     public static void main(String[] args) throws IOException {
@@ -18,6 +18,11 @@ public class Main implements Component {
     }
     @Get("/hw")
     public void getHelloWorld(Request request) throws IOException, IllegalAccessException {
-        request.sendTable(new UserComponent());
+        var map = new HashMap<String, Integer>();
+        map.put("abc", 1);
+        map.put("a", 1);
+        map.put("v", 1);
+        map.put("ed", 1);
+        request.sendTable(map);
     }
 }
