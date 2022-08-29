@@ -2,6 +2,7 @@ package com.koblizek.server.request;
 
 import com.koblizek.server.util.Table;
 import com.koblizek.server.util.annotations.table.TableComponent;
+import com.koblizek.server.util.json.JSON;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
@@ -52,7 +53,7 @@ public final class Request {
         stream.write(builder.toString().getBytes());
         stream.close();
     }
-    public <K, V> void sendTable(Map<K, V> map) throws IOException {
+    public <K, V> void sendJSON(Map<K, V> map) throws IOException {
         if (map.isEmpty()) return;
         exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json"));
         StringBuilder builder = new StringBuilder("{");
@@ -68,6 +69,13 @@ public final class Request {
         exchange.sendResponseHeaders(200, builder.length());
         OutputStream stream = exchange.getResponseBody();
         stream.write(builder.toString().getBytes());
+        stream.close();
+    }
+    public <T> void sendJSON(JSON<T> json) throws IOException {
+        exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json"));
+        exchange.sendResponseHeaders(200, json.toString().length());
+        OutputStream stream = exchange.getResponseBody();
+        stream.write(json.toString().getBytes());
         stream.close();
     }
 }
