@@ -46,13 +46,7 @@ public class RESTServerImpl extends RESTServer {
                 } else if (declaredMethod.isAnnotationPresent(Delete.class)) {
                     components.add(new FunctionalComponent(FunctionalComponent.Type.DELETE,
                             declaredMethod.getAnnotation(Delete.class).value(), declaredMethod));
-                } else {
-                    throw new RESTServerException("Component " + declaredMethod.getName()
-                            + "couldn't be registered because one of conditions was not met");
                 }
-            } else {
-                throw new RESTServerException("Component " + declaredMethod.getName()
-                        + "couldn't be registered because one of conditions was not met");
             }
         }
         return this;
@@ -61,10 +55,13 @@ public class RESTServerImpl extends RESTServer {
     @Override
     public void publish(int port) throws IOException {
         for (FunctionalComponent component : components) {
+            System.out.println("[DEBUG]"+component.getPath()+"|"+component.getType());
             server.createContext(component.getPath(),
                 exchange -> {
                     try {
-                        component.getMethod().invoke(null, new Request(exchange));
+                        if (exchange.getRequestMethod().equals(component.getType().toString())) {
+                            component.getMethod().invoke(null, new Request(exchange));
+                        }
                     } catch (Exception e) {
                         throw new RESTServerException("Unknown error has occurred");
                     }

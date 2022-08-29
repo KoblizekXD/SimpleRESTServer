@@ -1,21 +1,23 @@
-package com.koblizek.test;
-
-import com.koblizek.server.RESTManager;
-import com.koblizek.server.RESTServer;
-import com.koblizek.server.request.Request;
-import com.koblizek.server.util.Component;
-import com.koblizek.server.util.annotations.Get;
-
-import java.io.IOException;
-
+# Simple REST Server in Java
+## Installation  
+You can install the latest release in gh release page
+## Usage  
+```java
+// Components means it supports accepting requests
 public class Main implements Component {
     public static void main(String[] args) throws IOException {
+        // Create REST server
         RESTServer server = RESTManager.createNewServer();
+        // Register component
         server.registerComponent(Main.class);
+        // Publish server on port
         server.publish(8080);
     }
+    // Get request
     @Get("/hw")
     public void getHelloWorld(Request request) throws IOException {
+        // Sends back "Hello world"
         request.send("Hello world");
     }
 }
+```
