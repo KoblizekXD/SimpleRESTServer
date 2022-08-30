@@ -32,7 +32,7 @@ public class RESTServerImpl extends RESTServer {
                     declaredMethod.getParameterCount() == 1 &&
                             declaredMethod.getParameters()[0].getType() == Request.class
             ) {
-                // Garbage code some1 pls fix it
+                // https://github.com/KoblizekXD/SimpleRESTServer/issues/4
                 if (declaredMethod.isAnnotationPresent(Get.class)) {
                     components.add(new FunctionalComponent(FunctionalComponent.Type.GET,
                             declaredMethod.getAnnotation(Get.class).value(), declaredMethod));
@@ -59,7 +59,7 @@ public class RESTServerImpl extends RESTServer {
                 exchange -> {
                     try {
                         if (exchange.getRequestMethod().equals(component.getType().toString())) {
-                            // newInstance deprecated - needs to be replaced
+                            // https://github.com/KoblizekXD/SimpleRESTServer/issues/3
                             component.getMethod().invoke(component.getMethod().getDeclaringClass().newInstance(), new Request(exchange));
                         }
                     } catch (Exception e) {
