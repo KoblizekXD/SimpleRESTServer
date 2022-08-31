@@ -13,6 +13,7 @@ import java.util.Map;
 
 public final class Request {
     private final HttpExchange exchange;
+
     public Request(HttpExchange exchange) {
         this.exchange = exchange;
     }
@@ -20,12 +21,14 @@ public final class Request {
     public HttpExchange getRaw() {
         return exchange;
     }
+
     public void send(String text) throws IOException {
         exchange.sendResponseHeaders(200, text.length());
         OutputStream stream = exchange.getResponseBody();
         stream.write(text.getBytes());
         stream.close();
     }
+
     public void sendTable(Table tableClass) throws IOException, IllegalAccessException {
         exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json"));
         StringBuilder builder = new StringBuilder("{");
@@ -33,7 +36,7 @@ public final class Request {
             Field field = tableClass.getClass().getFields()[i];
             if (field.isAnnotationPresent(TableComponent.class)) {
                 if (field.getType() == String.class) {
-                    if (i+1 == tableClass.getClass().getFields().length) {
+                    if (i + 1 == tableClass.getClass().getFields().length) {
                         builder.append("\"")
                                 .append(field.getName())
                                 .append("\":\"")
@@ -45,7 +48,7 @@ public final class Request {
                                 .append(field.get(tableClass)).append("\",");
                     }
                 } else {
-                    if (i+1 == tableClass.getClass().getFields().length) {
+                    if (i + 1 == tableClass.getClass().getFields().length) {
                         builder.append("\"")
                                 .append(field.getName())
                                 .append("\":")
@@ -65,6 +68,7 @@ public final class Request {
         stream.write(builder.toString().getBytes());
         stream.close();
     }
+
     public <K, V> void sendJSON(Map<K, V> map) throws IOException {
         if (map.isEmpty()) return;
         exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json"));
@@ -84,18 +88,23 @@ public final class Request {
                         .append(",");
             }
         });
-        builder.deleteCharAt(builder.toString().length()-1);
+        builder.deleteCharAt(builder.toString().length() - 1);
         builder.append("}");
         exchange.sendResponseHeaders(200, builder.length());
         OutputStream stream = exchange.getResponseBody();
         stream.write(builder.toString().getBytes());
         stream.close();
     }
+
     public <T> void sendJSON(JSON<T> json) throws IOException {
         exchange.getResponseHeaders().put("Content-Type", Collections.singletonList("application/json"));
         exchange.sendResponseHeaders(200, json.toString().length());
         OutputStream stream = exchange.getResponseBody();
         stream.write(json.toString().getBytes());
         stream.close();
+    }
+
+    public RequestBody getRequestBody() {
+        return new RequestBody(exchange.getRequestBody());
     }
 }
